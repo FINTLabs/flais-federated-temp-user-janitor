@@ -12,7 +12,7 @@ spec:
           restartPolicy: Never
           containers:
             - name: ldap-janitor
-              image: fintlabs.azurecr.io/ldap-janitor:build.8
+              image: fintlabs.azurecr.io/ldap-janitor:build.${BUILD_NUMBER}_${GIT_COMMIT}
               envFrom:
                 - secretRef:
                     name: fint-portal-user
