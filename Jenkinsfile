@@ -8,7 +8,7 @@ pipeline {
         }
         stage('Publish') {
             when {
-                branch 'master'
+                branch 'main'
             }
             steps {
                 sh "docker tag ${GIT_COMMIT} fintlabsacr.azurecr.io/ldap-janitor:build.${BUILD_NUMBER}_${GIT_COMMIT}"

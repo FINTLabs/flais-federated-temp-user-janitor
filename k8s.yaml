@@ -1,7 +1,7 @@
 apiVersion: batch/v1beta1
 kind: CronJob
 metadata:
-  name: events-collector
+  name: ldap-janitor
 spec:
   concurrencyPolicy: Forbid
   schedule: "0 0 * * *"
