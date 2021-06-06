@@ -17,5 +17,5 @@ spec:
                 - secretRef:
                     name: fint-portal-user
               env:
-                - {name: JAVA_TOOL_OPTIONS, value: -XX:+ExitOnOutOfMemoryError -Xmx1G -verbose:gc}
+                - {name: JAVA_TOOL_OPTIONS, value: '-XX:+ExitOnOutOfMemoryError -Xmx1G -verbose:gc'}
                 - {name: fint.ldap.federated-user-base, value: "ou=federated-users,o=fint"}
