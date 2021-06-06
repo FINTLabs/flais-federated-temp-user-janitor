@@ -1,0 +1,21 @@
+apiVersion: batch/v1beta1
+kind: CronJob
+metadata:
+  name: events-collector
+spec:
+  concurrencyPolicy: Forbid
+  schedule: "0 0 * * *"
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          restartPolicy: Never
+          containers:
+            - name: ldap-janitor
+              image: fintlabs.azurecr.io/ldap-janitor:build.8
+              envFrom:
+                - secretRef:
+                    name: fint-portal-user
+              env:
+                - {name: JAVA_TOOL_OPTIONS, value: -XX:+ExitOnOutOfMemoryError -Xmx1G -verbose:gc}
+                - {name: fint.ldap.federated-user-base, value: ou=federated-users,o=fint}
