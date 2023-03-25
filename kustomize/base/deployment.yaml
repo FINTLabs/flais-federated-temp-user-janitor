@@ -1,0 +1,46 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: flais-federated-temp-user-janitor
+spec:
+  replicas: 1
+  template:
+    metadata:
+      annotations:
+        prometheus.io/path: /actuator/prometheus
+        prometheus.io/port: "8080"
+        prometheus.io/scrape: "true"
+    spec:
+      containers:
+        - name: flais-federated-temp-user-janitor
+          securityContext:
+            { }
+          image: "ghcr.io/fintlabs/flais-federated-temp-user-janitor:sha-0000000"
+          imagePullPolicy: IfNotPresent
+          env:
+            - name: logging.level.no.fintlabs
+              value: DEBUG
+            - name: spring.webflux.base-path
+              value: /infra/nam/oauth/clients/validator
+          envFrom:
+            - secretRef:
+                name: flais-federated-temp-user-janitor
+          ports:
+            - name: http
+              containerPort: 8080
+              protocol: TCP
+          livenessProbe:
+            httpGet:
+              path: /actuator/health
+              port: http
+          readinessProbe:
+            httpGet:
+              path: /
+              port: http
+          resources:
+            limits:
+              memory: 512Mi
+              cpu: 500m
+            requests:
+              memory: 256Mi
+              cpu: 250m
