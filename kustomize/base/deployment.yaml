@@ -33,10 +33,14 @@ spec:
             httpGet:
               path: /actuator/health/liveness
               port: http
+            initialDelaySeconds: 3
+            periodSeconds: 3
           readinessProbe:
             httpGet:
               path: /actuator/health/readiness
               port: http
+            initialDelaySeconds: 3
+            periodSeconds: 3
           resources:
             limits:
               memory: 512Mi
