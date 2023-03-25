@@ -1,36 +1,42 @@
 package no.fintlabs.federateduser;
 
+import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
-import no.fintlabs.ldap.LdapService;
-import org.springframework.beans.factory.annotation.Value;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.atomic.AtomicInteger;
 
 @Slf4j
 @Service
 public class FederatedUserService {
 
-    @Value("${fint.ldap.federated-user-base}")
-    private String federatedUserBase;
 
-    private final LdapService ldapService;
+    private final FederatedUserRepository federatedUserRepository;
 
-    public FederatedUserService(LdapService ldapService) {
-        this.ldapService = ldapService;
+
+    @Getter
+    private final List<FederatedUser> federatedUsers = new ArrayList<>();
+
+    @Getter
+    private final List<FederatedUser> deletedFederatedUsers = new ArrayList<>();
+
+    public FederatedUserService(FederatedUserRepository federatedUserRepository) {
+        this.federatedUserRepository = federatedUserRepository;
     }
 
+    @Scheduled(cron = "${flais.nam.federated-users-cleanup.cron:0 0 0 * * *}")
     public void deleteAllFederatedUsers() {
-        AtomicInteger deletedUserCount = new AtomicInteger();
-        List<FederatedUser> federatedUsers = ldapService.getAll(federatedUserBase, FederatedUser.class);
-        log.info("Found {} users.", federatedUsers.size());
+        federatedUsers.clear();
+        deletedFederatedUsers.clear();
+        federatedUsers.addAll(federatedUserRepository.findAll());
+
         federatedUsers.forEach(federatedUser -> {
-                    log.info("Deleting {}", federatedUser.getDn());
-                    ldapService.deleteEntry(federatedUser);
-                    deletedUserCount.getAndIncrement();
+                    federatedUserRepository.delete(federatedUser);
+                    deletedFederatedUsers.add(federatedUser);
                 }
         );
-        log.info("Deleted {} of {} users", federatedUsers.size(), deletedUserCount);
+        log.info("Deleted {} of {} users", federatedUsers.size(), deletedFederatedUsers.size());
     }
 }
