@@ -39,7 +39,7 @@ spec:
             httpGet:
               path: /actuator/health/readiness
               port: http
-            initialDelaySeconds: 15
+            initialDelaySeconds: 60
             periodSeconds: 3
           resources:
             limits:
