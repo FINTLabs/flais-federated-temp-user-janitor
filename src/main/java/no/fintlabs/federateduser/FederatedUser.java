@@ -8,7 +8,7 @@ import org.springframework.ldap.odm.annotations.Id;
 import javax.naming.Name;
 
 @Data
-@Entry(objectClasses = {"person", "inetOrgPerson", "top"}, base = "ou=federated-users,o=fint")
+@Entry(objectClasses = {"person", "inetOrgPerson", "top"})
 public final class FederatedUser {
 
     @Id

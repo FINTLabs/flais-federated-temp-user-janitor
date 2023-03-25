@@ -1,4 +1,8 @@
 
+flais:
+  nam:
+    federated-users-cleanup:
+      cron: 0 0 0 * * *
 management:
   endpoints:
     web:

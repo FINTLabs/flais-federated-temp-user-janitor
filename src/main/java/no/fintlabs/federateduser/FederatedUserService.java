@@ -26,7 +26,7 @@ public class FederatedUserService {
         this.federatedUserRepository = federatedUserRepository;
     }
 
-    @Scheduled(cron = "${flais.nam.federated-users-cleanup.cron:0 0 0 * * *}")
+    @Scheduled(cron = "${flais.nam.federated-users-cleanup.cron}")
     public void deleteAllFederatedUsers() {
         federatedUsers.clear();
         deletedFederatedUsers.clear();
