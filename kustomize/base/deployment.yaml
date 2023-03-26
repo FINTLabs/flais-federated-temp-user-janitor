@@ -20,8 +20,6 @@ spec:
           env:
             - name: logging.level.no.fintlabs
               value: DEBUG
-            - name: spring.webflux.base-path
-              value: /infra/nam/oauth/clients/validator
           envFrom:
             - secretRef:
                 name: flais-federated-temp-user-janitor
@@ -39,8 +37,9 @@ spec:
             httpGet:
               path: /actuator/health/readiness
               port: http
-            initialDelaySeconds: 5
+            initialDelaySeconds: 60
             periodSeconds: 5
+            failureThreshold: 10
           resources:
             limits:
               memory: 512Mi
