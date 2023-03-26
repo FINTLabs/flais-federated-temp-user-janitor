@@ -3,6 +3,11 @@ flais:
     federated-users-cleanup:
       cron: 0 0 0 * * *
 management:
+  health:
+    livenessstate:
+      enabled: true
+    readinessstate:
+      enabled: true
   endpoints:
     web:
       exposure:
