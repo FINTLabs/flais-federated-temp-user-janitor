@@ -3,7 +3,7 @@
 
 Service to clean up all temporary federated users that NetIQ Access Manager creates in the user store.
 
-## Propeties
+## Properties
 
 | Property                               | Default                   | Description                                                         |
 |----------------------------------------|---------------------------|---------------------------------------------------------------------|
