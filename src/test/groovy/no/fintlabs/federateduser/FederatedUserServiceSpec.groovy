@@ -1,6 +1,7 @@
 package no.fintlabs.federateduser
 
 import groovy.util.logging.Slf4j
+import no.fintlabs.Observability
 import spock.lang.Specification
 
 @Slf4j
@@ -10,7 +11,7 @@ class FederatedUserServiceSpec extends Specification {
 
     def "deleteAllFederatedUsers should remove all users"() {
         given:
-        def federatedUserService = new FederatedUserService(federatedUserRepository)
+        def federatedUserService = new FederatedUserService(federatedUserRepository, Mock(Observability.class))
 
         when:
         federatedUserService.deleteAllFederatedUsers()
