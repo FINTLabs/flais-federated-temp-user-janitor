@@ -2,6 +2,7 @@ package no.fintlabs.federateduser;
 
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
+import no.fintlabs.Observability;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
@@ -15,6 +16,8 @@ public class FederatedUserService {
 
     private final FederatedUserRepository federatedUserRepository;
 
+    private final Observability observability;
+
 
     @Getter
     private final List<FederatedUser> federatedUsers = new ArrayList<>();
@@ -22,8 +25,9 @@ public class FederatedUserService {
     @Getter
     private final List<FederatedUser> deletedFederatedUsers = new ArrayList<>();
 
-    public FederatedUserService(FederatedUserRepository federatedUserRepository) {
+    public FederatedUserService(FederatedUserRepository federatedUserRepository, Observability observability) {
         this.federatedUserRepository = federatedUserRepository;
+        this.observability = observability;
     }
 
     @Scheduled(cron = "${flais.nam.federated-users-cleanup.cron}")
@@ -38,5 +42,8 @@ public class FederatedUserService {
                 }
         );
         log.info("Deleted {} of {} users", federatedUsers.size(), deletedFederatedUsers.size());
+
+        observability.updatedFederatedUsers(federatedUsers.size());
+        observability.updateFederatedDeletedUsers(deletedFederatedUsers.size());
     }
 }
