@@ -1,39 +1,31 @@
 package no.fintlabs;
 
-import io.micrometer.core.instrument.Gauge;
+import io.micrometer.core.instrument.Counter;
 import io.micrometer.core.instrument.MeterRegistry;
-import no.fintlabs.federateduser.FederatedUserService;
 import org.springframework.stereotype.Component;
-
-import javax.annotation.PostConstruct;
 
 @Component
 public class Observability {
-    private final MeterRegistry registry;
-    private final FederatedUserService federatedUserService;
 
-    public Observability(MeterRegistry registry, FederatedUserService federatedUserService) {
-        this.registry = registry;
-        this.federatedUserService = federatedUserService;
-    }
+    private final Counter federatedUsersCounter;
+    private final Counter federatedUsersDeletedCounter;
 
-    @PostConstruct
-    public void init() {
+    public Observability(MeterRegistry registry) {
 
-        Gauge.builder("flais.nam.federated-users.count",
-                        federatedUserService,
-                        federatedUserService -> federatedUserService.getFederatedUsers().size()
-                )
+        federatedUsersCounter = Counter.builder("flais.nam.federated-users")
                 .description("The total number of federated users at the time we query for users to clean up.")
                 .register(registry);
 
-
-        Gauge.builder("flais.nam.federated-users.deleted",
-                        federatedUserService,
-                        federatedUserService -> federatedUserService.getDeletedFederatedUsers().size()
-                )
+        federatedUsersDeletedCounter = Counter.builder("flais.nam.federated-users.deleted")
                 .description("The total number of federated users deleted at the time of clean up.")
                 .register(registry);
+    }
 
+    public void updatedFederatedUsers(double count) {
+        federatedUsersCounter.increment(count);
+    }
+
+    public void updateFederatedDeletedUsers(double count) {
+        federatedUsersDeletedCounter.increment(count);
     }
 }
