@@ -28,14 +28,14 @@ jobs:
 
       - name: Extract metadata (tags, labels) for Docker
         id: meta
-        uses: docker/metadata-action@v4
+        uses: docker/metadata-action@v5
         with:
           images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
           tags: |
             type=sha,prefix={{date 'YYYY.MM.DD-HH.mm'}}-,priority=9002
             
       - name: Build and push Docker image
-        uses: docker/build-push-action@v5.0.0
+        uses: docker/build-push-action@v6
         with:
           context: .
           push: true
