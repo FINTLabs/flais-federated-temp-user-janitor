@@ -1,0 +1,27 @@
+name: Create release
+
+on:
+  workflow_call:
+
+jobs:
+  create-release:
+    name: Create release
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Get current version
+        id: version
+        run: |
+          version=$(grep "^version" build.gradle | sed 's/version[ \t]*=[ \t]*[\'\"]\(.*\)[\'\"]/\1/')
+          echo "Version found: $version"
+          echo "::set-output name=version::$version"
+
+      - uses: ncipollo/release-action@v1
+        with:
+          body: "release"
+          tag: ${{ steps.version.outputs.version }}
+          generateReleaseNotes: true
