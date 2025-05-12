@@ -13,6 +13,7 @@ env:
 
 jobs:
   publish:
+    name: Build and publish docker image
     runs-on: ubuntu-latest
     outputs:
       image-tags: ${{ steps.meta.outputs.tags }}
