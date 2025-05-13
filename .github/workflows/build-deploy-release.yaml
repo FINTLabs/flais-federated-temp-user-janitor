@@ -14,7 +14,7 @@ on:
         default: 'infra-test'
         type: choice
         options:
-          - infra-test
+          - infra_test
           - infra
 
 permissions:
@@ -27,12 +27,12 @@ jobs:
     secrets: inherit
 
   deploy-infra-test:
-    if: github.ref == 'refs/heads/main' || (github.event_name == 'workflow_dispatch' && inputs.environment == 'infra-test')
+    if: github.ref == 'refs/heads/main' || (github.event_name == 'workflow_dispatch' && inputs.environment == 'infra_test')
     uses: ./.github/workflows/.cluster-deploy.yaml
     needs: build-publish
     secrets: inherit
     with:
-      environment: infra-test
+      environment: infra_test
       image-tags: ${{ needs.build-publish.outputs.image-tags }}
 
   deploy-infra:
