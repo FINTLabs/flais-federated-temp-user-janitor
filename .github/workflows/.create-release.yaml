@@ -11,16 +11,16 @@ jobs:
       contents: write
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7.0.1
 
       - name: Get current version
         id: version
         run: |
-          version=$(grep "^version" build.gradle | sed 's/version[ \t]*=[ \t]*[\'\"]\(.*\)[\'\"]/\1/')
+          version=$(awk -F "'" '/^version = / {print $2}' build.gradle)
           echo "Version found: $version"
           echo "version=$version" >> $GITHUB_OUTPUT
 
-      - uses: ncipollo/release-action@v1
+      - uses: ncipollo/release-action@v1.21.0
         with:
           body: "release"
           tag: ${{ steps.version.outputs.version }}
